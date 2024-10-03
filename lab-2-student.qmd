@@ -102,7 +102,7 @@ represent:
 
 ```{r}
 #| label: load-data
-#| echo: false
+#| message: false
 library("here")
 surveys <- read_csv(here::here("data","surveys.csv"))
 
@@ -165,7 +165,6 @@ We can see there are **a lot** of points plotted on top of each other. Let's try
 
 ```{r}
 #| label: Alpha
-#| echo: false
 ggplot(data = surveys,
        mapping = aes(
          x= weight, 
@@ -181,7 +180,6 @@ subsets and see if that allows for us to see the trends a bit better.
 
 ```{r}
 #| label: Facets
-#| echo: false
 ggplot(data = surveys,
        mapping = aes(
          x= weight, 
@@ -196,7 +194,6 @@ ggplot(data = surveys,
 
 ```{r}
 #| label: Lables
-#| echo: false
 ggplot(data = surveys,
        mapping = aes(
          x= weight, 
@@ -207,7 +204,7 @@ ggplot(data = surveys,
   labs(
     x="Weight (g)", 
     y="Hindfoot Length (cm)", 
-    title= "Relationship Between Weight and Hindfoot Length")
+    title= "Relationship Between Rodent Weight and Hindfoot Length")
 ```
 
 
@@ -217,7 +214,6 @@ It takes a larger cognitive load to read text that is rotated. It is common prac
 
 ```{r}
 #| label: Lables
-#| echo: false
 ggplot(data = surveys,
        mapping = aes(
          x= weight, 
@@ -228,7 +224,7 @@ ggplot(data = surveys,
   labs(
     x="Weight (g)", 
     y="", 
-    title= "Relationship Between Weight and Hindfoot Length",
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
     subtitle= "Y-axis representing Hindfoot Length (cm)")
 ```
 
@@ -241,17 +237,16 @@ A fundamental complaint of boxplots is that they do not plot the raw data. Howev
 
 ```{r}
 #| label: boxplot
-#| echo: false
 ggplot(data = surveys,
        mapping = aes(
          x= species, 
          y= weight)
        ) +
-  geom_boxplot()+
+  geom_boxplot(alpha=0.5)+
   labs(
     x="Species", 
     y="", 
-    title= "Relationship Between Weight and Hindfoot Length",
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
     subtitle= "Y-axis representing Weight (g)")
 ```
 
@@ -259,18 +254,17 @@ ggplot(data = surveys,
 
 ```{r}
 #| label: Boxplot observations
-#| echo: false
 ggplot(data = surveys,
        mapping = aes(
          x= species, 
          y= weight)
        ) +
-  geom_point()+
+  geom_point(alpha=0.5)+
   geom_boxplot()+
   labs(
     x="Species", 
     y="", 
-    title= "Relationship Between Weight and Hindfoot Length",
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
     subtitle= "Y-axis representing Weight (g)")
 ```
 
@@ -282,18 +276,17 @@ a bit, using `geom_jitter()`.
 
 ```{r}
 #| label: Boxplot observations
-#| echo: false
 ggplot(data = surveys,
        mapping = aes(
          x= species, 
          y= weight)
        ) +
-  geom_jitter()+
+  geom_jitter(alpha=0.5)+
   geom_boxplot()+
   labs(
     x="Species", 
     y="", 
-    title= "Relationship Between Weight and Hindfoot Length",
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
     subtitle= "Y-axis representing Weight (g)")
 ```
 
@@ -304,21 +297,71 @@ That should look a bit better! But its really hard to see the points when everyt
 to use whatever color you wish! Some of my favorites are "orange3" and
 "steelblue".
 
-<!-- Continue to modify the plot you made for question 10! -->
+```{r}
+#| label: Boxplot Colors
+ggplot(data = surveys,
+       mapping = aes(
+         x= species, 
+         y= weight,
+         )
+       ) +
+  geom_jitter(alpha=0.5, color="green4")+
+  geom_boxplot()+
+  labs(
+    x="Species", 
+    y="", 
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
+    subtitle= "Y-axis representing Weight (g)")
+```
+
 
 Great! Now that you can see the points, you should notice something odd: there
 are two colors of points still being plotted. Some of the observations are being plotted twice, once from `geom_boxplot()` as outliers and again from `geom_jitter()`!
 
 **14. Inspect the help file for `geom_boxplot()` and see how you can remove the outliers from being plotted by `geom_boxplot()`. Make this change in your code!**
 
-<!-- Continue to modify the plot you made for question 10! -->
+```{r}
+#| label: Boxplot Outliers
+ggplot(data = surveys,
+       mapping = aes(
+         x= species, 
+         y= weight,
+         )
+       ) +
+  geom_jitter(alpha=0.5, color="green4")+
+  geom_boxplot(outliers=FALSE)+
+  labs(
+    x="Species", 
+    y="", 
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
+    subtitle= "Y-axis representing Weight (g)")
+```
+
 
 Some small changes can make **big** differences to plots. One of these changes
 are better labels for a plot's axes and legend.
 
 **15. Modify the $x$-axis and $y$-axis labels to describe what is being plotted. Be sure to include any necessary units! You might also be getting overlap in the species names -- use `theme(axis.text.x = ____)` or `theme(axis.text.y = ____)` to turn the species axis labels 45 degrees.**
+Help from: https://stackoverflow.com/questions/1330989/rotating-and-spacing-axis-labels-in-ggplot2
 
-<!-- Continue to modify the plot you made for question 10! -->
+```{r}
+#| label: Boxplot labels
+ggplot(data = surveys,
+       mapping = aes(
+         x= species, 
+         y= weight,
+         )
+       ) +
+  geom_jitter(alpha=0.5, color="green4")+
+  geom_boxplot(outliers=FALSE)+
+  labs(
+    x="Species", 
+    y="", 
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
+    subtitle= "Y-axis representing Weight (g)")+
+    theme(axis.text.x = element_text(angle=-45))
+```
+
 
 Some people (and journals) prefer for boxplots to be stacked with a specific orientation! Let's practice changing the orientation of our boxplots.
 
@@ -326,7 +369,20 @@ Some people (and journals) prefer for boxplots to be stacked with a specific ori
 
 ```{r}
 #| label: rotated-boxplot
-
+ggplot(data = surveys,
+       mapping = aes(
+         x= weight, 
+         y= species,
+         )
+       ) +
+  geom_jitter(alpha=0.5, 
+              color="green4")+
+  geom_boxplot(outliers=FALSE)+
+  labs(
+    x="Weight (g)", 
+    y="", 
+    title= "Relationship Between Rodent Weight and Hindfoot Length",
+    subtitle= "Y-axis representing Species",)
 ```
 
 Notice how vertically stacked boxplots make the species labels more readable
@@ -359,12 +415,14 @@ might want to look up the help documentation for `aov()`.
 ```{r}
 #| label: anova
 
-species_mod <- aov()
+species_mod <- aov(weight ~ species, data=surveys)
 
 summary(species_mod)
 ```
 
 **18. Based on the results of the ANOVA F-test, draw a conclusion in context of the hypotheses. Make sure to cite appropriate output from above.**
+
+There is a significant difference between at least one species weight and another
 
 
 # Lab 2 Submission
